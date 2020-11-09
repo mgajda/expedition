@@ -1,0 +1,10 @@
+resolver:
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/20.yaml
+
+packages:
+- .
+
+extra-deps:
+- restartable-0.3.0.0@sha256:359eeaa5b7c65b83ed5d26d6082ddec42541aa06cbd876a53507972e5f69acd3,1793
+- SDL-0.6.7.0@sha256:9d6ba75c0cab575ec38468c8277803983e985f9622437aeca6a53e6a7337a7d5,2045
+- SDL-image-0.6.2.0@sha256:49234fd721f63969b461ffd94d73c163d82444c3716ef575b2a725aaac29ade6,1216
