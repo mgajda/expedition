@@ -1,41 +1,68 @@
-import Graphics.UI.SDL as SDL
-import Graphics.UI.SDL.Image as SDL
-import System.Exit ( exitWith, ExitCode(ExitSuccess) )
+{-# LANGUAGE RecordWildCards   #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell   #-}
+module Main where
+
+import qualified SDL
+import qualified SDL.Mixer as Mixer
+import qualified SDL.Font as Font
+import qualified SDL.Event as SDL
+import qualified SDL.Input.Keyboard.Codes as SDL
+import qualified Data.Text.IO as T
 import System.Random
+import Control.Restartable.Checkpoint
+--import Optics.Optic
+import Optics
+import Optics.TH
+--import KeyState
 
 width = 640
 height = 480
 
-main = withInit [InitVideo] $ 
-    do screen <- setVideoMode height width 16 [SWSurface]
-       setCaption "Meet aliens" ""
-       enableUnicode True
-       image <- load "assets/eagle.png"
-       --image <- loadBMP "../image.bmp"
-       display image
-       loop (display image)
+data Config = Config {
+    cWindow    :: SDL.Window
+  , cRenderer  :: SDL.Renderer
+  , cResources :: Resources
+  }
 
-display :: Surface -> IO ()
-display image
-    = do screen <- getVideoSurface
-         let format = surfaceGetPixelFormat screen
-         white <- mapRGB format 0xFF 0xFF 0xFF
-         green <- mapRGB format 0 0xFF 0
-         fillRect screen Nothing white
-         --fillRect screen (Just (Rect 10 10 10 10)) red
-         posX <- randomRIO (0,width-1-surfaceGetWidth image)
-         posY <- randomRIO (0,height-1-surfaceGetHeight image)
-         blitSurface image Nothing screen (Just (Rect posX posY 0 0))
-         SDL.flip screen
+data Resources = Resources {
+  }
 
+data Game = Game { _gameTime :: Int }
 
-loop :: IO () -> IO ()
-loop display
-    = do event <- waitEvent
-         case event of
-           Quit -> exitWith ExitSuccess
-           KeyDown (Keysym _ _ 'q') -> exitWith ExitSuccess
-           KeyDown (Keysym _ _ ' ') -> display
-           _ -> return ()
-         loop display
+makeLenses ''Game
 
+loadResources renderer     = return Resources
+freeResources Resources {} = return ()
+
+main :: IO ()
+main = do
+  SDL.initialize [SDL.InitVideo, SDL.InitAudio]
+  Font.initialize
+  Mixer.openAudio Mixer.defaultAudio 256
+  cWindow    <- SDL.createWindow "AlienExp" SDL.defaultWindow { SDL.windowInitialSize = SDL.V2 1280 1024 }
+  cRenderer  <- SDL.createRenderer cWindow (-1) SDL.defaultRenderer
+  cResources <- loadResources cRenderer
+  let config = Config {..}
+  let state = Game 0
+  run config state
+  --restartable $ run config
+  SDL.destroyWindow cWindow
+  freeResources     cResources
+  Mixer.closeAudio
+  Mixer.quit
+  Font.quit
+  SDL.quit
+
+keycodeToAction SDL.KeycodeSpace = step
+keycodeToAction other            = id
+
+step = gameTime `over` (+1)
+
+run config g = do
+  evt <- SDL.eventPayload <$> SDL.waitEvent
+  case evt of
+    SDL.QuitEvent -> return ()
+    SDL.KeyboardEvent (SDL.KeyboardEventData { SDL.keyboardEventKeysym = SDL.Keysym { SDL.keysymKeycode = kcode } }) ->
+      run config $ keycodeToAction kcode g
+    other     -> run config g

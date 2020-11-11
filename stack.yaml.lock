@@ -25,6 +25,13 @@ packages:
       sha256: 6472bca9d375d8ea0ab1ba18b092561395476531c1eba7d5f8f54df8261418ac
   original:
     hackage: SDL-image-0.6.2.0@sha256:49234fd721f63969b461ffd94d73c163d82444c3716ef575b2a725aaac29ade6,1216
+- completed:
+    hackage: less-arbitrary-0.1.0.2@sha256:125ca33ac2d69cc7f49e1debdfeb00e9b8ccc185563ec7b8afb0acade4acec4f,2661
+    pantry-tree:
+      size: 455
+      sha256: 89d50f820f3cf2951e45d5750634161e519bb9a8081070a3a77ef22e2f97f9b7
+  original:
+    hackage: less-arbitrary-0.1.0.2@sha256:125ca33ac2d69cc7f49e1debdfeb00e9b8ccc185563ec7b8afb0acade4acec4f,2661
 snapshots:
 - completed:
     size: 532177
