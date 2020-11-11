@@ -67,18 +67,6 @@ main = do
 keycodeToAction SDL.KeycodeSpace = step
 keycodeToAction other            = id
 
-{-
-loadTexture :: SDL.Renderer -> FilePath -> IO Texture
-loadTexture r filePath = do
-  surface <- getDataFileName filePath >>= SDL.load
-  size <- SDL.surfaceDimensions surface
-  let key = V4 0 maxBound maxBound maxBound
-  SDL.surfaceColorKey surface $= Just key
-  t <- SDL.createTextureFromSurface r surface
-  SDL.freeSurface surface
-  return (Texture t size)
-  -}
-
 step = gameTime `over` (+1)
 
 data Texture = Texture SDL.Texture (SDL.V2 CInt)
