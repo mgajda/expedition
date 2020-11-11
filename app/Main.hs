@@ -8,7 +8,6 @@ module Main where
 import qualified SDL
 import qualified SDL.Mixer                as Mixer
 import qualified SDL.Font                 as Font
-import qualified SDL.Font                 as Font
 import qualified SDL.Event                as SDL
 import qualified SDL.Image                as Image
 import qualified SDL.Input.Keyboard.Codes as SDL
@@ -20,10 +19,7 @@ import           Control.Restartable.Checkpoint
 import           Lens.Micro.TH
 import           Foreign.C.Types(CInt)
 
-import Paths_alien_expedition(getDataFileName)
-
-width = 640
-height = 480
+import Resources
 
 data Config = Config {
     cWindow    :: SDL.Window
@@ -31,25 +27,19 @@ data Config = Config {
   , cResources :: Resources
   }
 
-data Resources = Resources {
-    rFont :: Font.Font
-  }
-
 data Game = Game { _gameTime :: Int }
 
 makeLenses ''Game
 
-loadResources renderer = do
-  Resources <$> Font.load "assets/Loja.otf" 72
-freeResources = Font.free . rFont
+screenWidth  = 1280
+screenHeight = 1024
 
 main :: IO ()
 main = do
   SDL.initialize [SDL.InitVideo, SDL.InitAudio]
-  Font.initialize
-  Image.initialize [Image.InitPNG]
+
   Mixer.openAudio Mixer.defaultAudio 256
-  cWindow    <- SDL.createWindow "AlienExp" SDL.defaultWindow { SDL.windowInitialSize = SDL.V2 1280 1024 }
+  cWindow    <- SDL.createWindow "AlienExp" SDL.defaultWindow { SDL.windowInitialSize = SDL.V2 screenWidth screenHeight }
   cRenderer  <- SDL.createRenderer cWindow (-1) SDL.defaultRenderer
   cResources <- loadResources cRenderer
   let config = Config {..}
