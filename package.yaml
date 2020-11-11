@@ -28,8 +28,8 @@ dependencies:
 - sdl2-ttf
 - apecs
 - text
-- optics
-- optics-th
+- rio
+- microlens-th
 
 library:
   source-dirs: src

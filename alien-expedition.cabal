@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c5d268d7f84e593afbd2d3443fff3d748fbac482286e633472f4664304df4304
+-- hash: 2c321b149c740cec7188c4d7c1161f8c163eacad8abd25b90d4eb7f7474a84f7
 
 name:           alien-expedition
 version:        0.1.0.0
@@ -36,9 +36,9 @@ library
   build-depends:
       apecs
     , base >=4.7 && <5
-    , optics
-    , optics-th
+    , microlens-th
     , restartable
+    , rio
     , sdl2
     , sdl2-image
     , sdl2-mixer
@@ -57,10 +57,10 @@ executable alien-expedition-exe
       alien-expedition
     , apecs
     , base >=4.7 && <5
-    , optics
-    , optics-th
+    , microlens-th
     , random
     , restartable
+    , rio
     , sdl2
     , sdl2-image
     , sdl2-mixer
@@ -82,10 +82,10 @@ test-suite alien-expedition-test
     , apecs
     , base >=4.7 && <5
     , less-arbitrary
-    , optics
-    , optics-th
+    , microlens-th
     , quickcheck-classes
     , restartable
+    , rio
     , sdl2
     , sdl2-image
     , sdl2-mixer
