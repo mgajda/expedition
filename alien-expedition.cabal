@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 39b32a18a6adc7ac91e66b5d5a03fe8441c8360fa85e9bdd029ed244be8bd74e
+-- hash: f204d3a86e80dada376667a8d4cd9e4a902652166a3f7c1255c51901a5baba21
 
 name:           alien-expedition
 version:        0.1.0.0
@@ -40,6 +40,7 @@ library
     , apecs
     , base >=4.7 && <5
     , classy-prelude
+    , linear
     , microlens
     , microlens-th
     , restartable
@@ -64,6 +65,7 @@ executable alien-expedition-exe
     , apecs
     , base >=4.7 && <5
     , classy-prelude
+    , linear
     , microlens
     , microlens-th
     , random
@@ -92,6 +94,7 @@ test-suite alien-expedition-test
     , base >=4.7 && <5
     , classy-prelude
     , less-arbitrary
+    , linear
     , microlens
     , microlens-th
     , quickcheck-classes

@@ -33,6 +33,7 @@ dependencies:
 - aeson
 - classy-prelude
 - microlens
+- linear
 
 library:
   source-dirs: src

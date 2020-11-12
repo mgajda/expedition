@@ -32,7 +32,10 @@ initializeContext = do
   SDL.initialize [SDL.InitVideo, SDL.InitAudio]
   Mixer.openAudio Mixer.defaultAudio 256
   ctxWindow    <- SDL.createWindow "AlienExp" SDL.defaultWindow { SDL.windowInitialSize = SDL.V2 screenWidth screenHeight
-                                                                , SDL.windowMode        = SDL.FullscreenDesktop }
+                                                                , SDL.windowMode        = SDL.Windowed
+                                                                , SDL.windowResizable   = True
+                                                                , SDL.windowPosition    = SDL.Absolute $ SDL.P $ SDL.V2 4000 1000 }
+  SDL.windowMinimumSize ctxWindow SDL.$= SDL.V2 screenWidth screenHeight
   ctxRenderer  <- SDL.createRenderer ctxWindow (-1) SDL.defaultRenderer
   return Context {..}
 

@@ -90,6 +90,11 @@ run, nextEvent :: Config
                -> World
                -> IO (World, Ending)
 run config ts g = do
+  when (ts == 0) $
+    SDL.setWindowPosition (cWindow config)
+                 $ SDL.Absolute $ SDL.P
+                 $ fmap fromIntegral
+                 $ g ^. windowPos
   SDL.V2 w h <- SDL.get $ SDL.windowSize $ cWindow config
   renderModel config w h g
   nextEvent   config ts g
@@ -101,6 +106,11 @@ nextEvent config ts g = do
   SDL.V2 w h <- SDL.get $ SDL.windowSize $ cWindow config
   case SDL.eventPayload evt of
     SDL.QuitEvent ->
+      return (g, Quit)
+    SDL.WindowMovedEvent (SDL.WindowMovedEventData { SDL.windowMovedEventPosition = SDL.P vec }) ->
+      run config (SDL.eventTimestamp evt) $ set windowPos vec g
+    SDL.KeyboardEvent (SDL.KeyboardEventData { SDL.keyboardEventKeysym = SDL.Keysym { SDL.keysymKeycode = SDL.KeycodeF12 } }) -> do
+      SDL.setWindowPosition (cWindow config) SDL.Wherever
       return (g, Quit)
     SDL.KeyboardEvent (SDL.KeyboardEventData { SDL.keyboardEventKeysym = SDL.Keysym { SDL.keysymKeycode = SDL.KeycodeQ } }) ->
       return (g, Quit)
