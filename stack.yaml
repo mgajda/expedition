@@ -12,3 +12,6 @@ extra-deps:
 - SDL-image-0.6.2.0@sha256:49234fd721f63969b461ffd94d73c163d82444c3716ef575b2a725aaac29ade6,1216
 - less-arbitrary-0.1.0.2@sha256:125ca33ac2d69cc7f49e1debdfeb00e9b8ccc185563ec7b8afb0acade4acec4f,2661
 - rapid-0.1.4@sha256:570dbbaf2d57d5de8ed239cae8aad3fcef59737e31246ea7e6999d46d41ae3da,1768
+# Development only
+- hie-compat-0.1.0.0@sha256:bf4c51730a9ffce50fd73a0e14d21d22720fa3cbe38fd5e4761fdce576d781ee,1339
+- implicit-hie-cradle-0.2.0.1@sha256:c6892ef9c16ba1e19f497a119c039a5845f46b93dd67538f37d4c002b222d4c1,2568

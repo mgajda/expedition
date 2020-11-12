@@ -31,7 +31,8 @@ dependencies:
 - rio
 - microlens-th
 - aeson
-- rapid
+- classy-prelude
+- microlens
 
 library:
   source-dirs: src
