@@ -1,0 +1,13 @@
+cradle:
+  stack:
+    - path: "./src"
+      component: "alien-expedition:lib"
+
+    - path: "./app/Main.hs"
+      component: "alien-expedition:exe:alien-expedition-exe"
+
+    - path: "./app/Paths_alien_expedition.hs"
+      component: "alien-expedition:exe:alien-expedition-exe"
+
+    - path: "./test"
+      component: "alien-expedition:test:alien-expedition-test"
