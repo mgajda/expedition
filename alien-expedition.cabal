@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2c321b149c740cec7188c4d7c1161f8c163eacad8abd25b90d4eb7f7474a84f7
+-- hash: ab7c7ec25a4afa3c53d462efb1cd9c850911a2f81b28974ba32aa88c3bea8ddb
 
 name:           alien-expedition
 version:        0.1.0.0
@@ -29,12 +29,14 @@ library
   exposed-modules:
       Lib
       Resources
+      World
   other-modules:
       Paths_alien_expedition
   hs-source-dirs:
       src
   build-depends:
-      apecs
+      aeson
+    , apecs
     , base >=4.7 && <5
     , microlens-th
     , restartable
@@ -54,7 +56,8 @@ executable alien-expedition-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      alien-expedition
+      aeson
+    , alien-expedition
     , apecs
     , base >=4.7 && <5
     , microlens-th
@@ -78,6 +81,7 @@ test-suite alien-expedition-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck
+    , aeson
     , alien-expedition
     , apecs
     , base >=4.7 && <5

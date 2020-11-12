@@ -30,6 +30,7 @@ dependencies:
 - text
 - rio
 - microlens-th
+- aeson
 
 library:
   source-dirs: src
