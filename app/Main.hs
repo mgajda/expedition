@@ -51,13 +51,14 @@ develMain = do
 
 -- | Normal entry
 main :: IO ()
-main = do
-  cContext   <- initializeContext
-  cResources <- loadResources $ ctxRenderer cContext
+main = restartable "game.save" $ \world -> do
+  cContext   <- initializeContext (world ^. windowPos )
+                                  (world ^. windowSize)
+  cResources <- loadResources     $ ctxRenderer cContext
   let config  = Config {..}
-  restartable "game.save" $ run config 0
-  freeResources cResources
-  freeContext   cContext
+  run config 0 world
+    <* freeResources cResources
+    <* freeContext   cContext
 
 keycodeToAction SDL.KeycodeSpace = step
 keycodeToAction SDL.Keycode2     = gameTime `over` (*2)
@@ -90,11 +91,6 @@ run, nextEvent :: Config
                -> World
                -> IO (World, Ending)
 run config ts g = do
-  when (ts == 0) $
-    SDL.setWindowPosition (cWindow config)
-                 $ SDL.Absolute $ SDL.P
-                 $ fmap fromIntegral
-                 $ g ^. windowPos
   SDL.V2 w h <- SDL.get $ SDL.windowSize $ cWindow config
   renderModel config w h g
   nextEvent   config ts g
@@ -108,7 +104,9 @@ nextEvent config ts g = do
     SDL.QuitEvent ->
       return (g, Quit)
     SDL.WindowMovedEvent (SDL.WindowMovedEventData { SDL.windowMovedEventPosition = SDL.P vec }) ->
-      run config (SDL.eventTimestamp evt) $ set windowPos vec g
+      run config (SDL.eventTimestamp evt) $ set windowPos (fromIntegral <$> vec) g
+    SDL.WindowResizedEvent (SDL.WindowResizedEventData { SDL.windowResizedEventSize = vec }) ->
+      run config (SDL.eventTimestamp evt) $ set windowSize (fromIntegral <$> vec) g
     SDL.KeyboardEvent (SDL.KeyboardEventData { SDL.keyboardEventKeysym = SDL.Keysym { SDL.keysymKeycode = SDL.KeycodeF12 } }) -> do
       SDL.setWindowPosition (cWindow config) SDL.Wherever
       return (g, Quit)

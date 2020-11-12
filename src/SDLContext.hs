@@ -27,17 +27,26 @@ data Context = Context {
 screenWidth  = 1280
 screenHeight = 1024
 
-initializeContext :: IO Context
-initializeContext = do
+initializeContext :: Integral a
+                  => SDL.V2   a -- initial window position
+                  -> SDL.V2   a -- initial window size
+                  -> IO Context
+initializeContext winPos winSize = do
   SDL.initialize [SDL.InitVideo, SDL.InitAudio]
   Mixer.openAudio Mixer.defaultAudio 256
-  ctxWindow    <- SDL.createWindow "AlienExp" SDL.defaultWindow { SDL.windowInitialSize = SDL.V2 screenWidth screenHeight
-                                                                , SDL.windowMode        = SDL.Windowed
+  ctxWindow    <- SDL.createWindow "AlienExp" SDL.defaultWindow { SDL.windowMode        = SDL.Windowed
                                                                 , SDL.windowResizable   = True
-                                                                , SDL.windowPosition    = SDL.Absolute $ SDL.P $ SDL.V2 4000 1000 }
-  SDL.windowMinimumSize ctxWindow SDL.$= SDL.V2 screenWidth screenHeight
+                                                                , SDL.windowPosition    = initialWinPos
+                                                                , SDL.windowInitialSize = initialWinSize }
+  print (initialWinPos, initialWinSize)
+  --SDL.windowMinimumSize ctxWindow SDL.$= SDL.V2 screenWidth screenHeight
   ctxRenderer  <- SDL.createRenderer ctxWindow (-1) SDL.defaultRenderer
   return Context {..}
+  where
+    initialWinPos  | winPos  == SDL.V2 0 0 = SDL.Wherever
+                   | otherwise             = SDL.Absolute $ SDL.P $ fmap fromIntegral winPos
+    initialWinSize | winSize == SDL.V2 0 0 = SDL.V2 screenWidth screenHeight
+                   | otherwise             = fmap fromIntegral winSize
 
 freeContext :: Context -> IO ()
 freeContext Context {..} = do
@@ -48,9 +57,9 @@ freeContext Context {..} = do
   Image.quit
   SDL.quit
 
-withContext    :: (Context -> IO a) -> IO a
-withContext act = do
-  context <- initializeContext
+withContext    :: Integral a => SDL.V2 a -> SDL.V2 a -> (Context -> IO a) -> IO a
+withContext winPos winSize act = do
+  context <- initializeContext winPos winSize
   result  <- act context
   freeContext    context
   return result
