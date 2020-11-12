@@ -4,8 +4,11 @@ resolver:
 packages:
 - .
 
+allow-newer: true
+
 extra-deps:
 - restartable-0.3.0.0@sha256:359eeaa5b7c65b83ed5d26d6082ddec42541aa06cbd876a53507972e5f69acd3,1793
 - SDL-0.6.7.0@sha256:9d6ba75c0cab575ec38468c8277803983e985f9622437aeca6a53e6a7337a7d5,2045
 - SDL-image-0.6.2.0@sha256:49234fd721f63969b461ffd94d73c163d82444c3716ef575b2a725aaac29ade6,1216
 - less-arbitrary-0.1.0.2@sha256:125ca33ac2d69cc7f49e1debdfeb00e9b8ccc185563ec7b8afb0acade4acec4f,2661
+- rapid-0.1.4@sha256:570dbbaf2d57d5de8ed239cae8aad3fcef59737e31246ea7e6999d46d41ae3da,1768

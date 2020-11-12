@@ -31,6 +31,7 @@ dependencies:
 - rio
 - microlens-th
 - aeson
+- rapid
 
 library:
   source-dirs: src

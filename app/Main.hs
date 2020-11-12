@@ -24,42 +24,47 @@ import           Data.Aeson
 
 import Resources
 import World
+import Rapid
+import SDLContext
 
 data Config = Config {
-    cWindow    :: SDL.Window
-  , cRenderer  :: SDL.Renderer
+    cContext   :: Context
   , cResources :: Resources
   }
 
-screenWidth  = 1280
-screenHeight = 1024
+-- | Accessors
+cRenderer  = ctxRenderer . cContext
+cWindow    = ctxWindow   . cContext
 
+-- | Rapid entry
+develMain :: IO ()
+develMain = do
+  rapid 0 $ \rapidRef -> do
+    cContext       <- createRef rapidRef "SDL context" initializeContext
+    restart rapidRef "game" $ do
+      cResources     <- loadResources cRenderer
+      let config      = Config {..}
+      restartable "game.save" $ run config
+
+-- | Normal entry
 main :: IO ()
 main = do
-  SDL.initialize [SDL.InitVideo, SDL.InitAudio]
-
-  Mixer.openAudio Mixer.defaultAudio 256
-  cWindow    <- SDL.createWindow "AlienExp" SDL.defaultWindow { SDL.windowInitialSize = SDL.V2 screenWidth screenHeight }
-  cRenderer  <- SDL.createRenderer cWindow (-1) SDL.defaultRenderer
-  cResources <- loadResources cRenderer
-  let config = Config {..}
+  cContext   <- initializeContext
+  cResources <- loadResources $ ctxRenderer cContext
+  let config  = Config {..}
   restartable "game.save" $ run config
-  SDL.destroyWindow cWindow
-  freeResources     cResources
-  Mixer.closeAudio
-  Mixer.quit
-  Font.quit
-  Image.quit
-  SDL.quit
+  freeResources cResources
+  freeContext   cContext
+
 
 keycodeToAction SDL.KeycodeSpace = step
+keycodeToAction SDL.Keycode2     = gameTime `over` (*2)
 keycodeToAction other            = id
 
 step = gameTime `over` (+1)
 
 data Texture = Texture SDL.Texture (SDL.V2 CInt)
 
---renderTexture :: SDL.Renderer -> Texture -> Point V2 CInt -> IO ()
 renderTexture r (Texture t size) xy = do
   SDL.copy r t Nothing (Just $ SDL.Rectangle xy size)
 

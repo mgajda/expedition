@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ab7c7ec25a4afa3c53d462efb1cd9c850911a2f81b28974ba32aa88c3bea8ddb
+-- hash: 63a203512c549aed92c04a5bb822692e06ff484c8fa712ee3bdc9f72f9774c24
 
 name:           alien-expedition
 version:        0.1.0.0
@@ -29,6 +29,7 @@ library
   exposed-modules:
       Lib
       Resources
+      SDLContext
       World
   other-modules:
       Paths_alien_expedition
@@ -39,6 +40,7 @@ library
     , apecs
     , base >=4.7 && <5
     , microlens-th
+    , rapid
     , restartable
     , rio
     , sdl2
@@ -62,6 +64,7 @@ executable alien-expedition-exe
     , base >=4.7 && <5
     , microlens-th
     , random
+    , rapid
     , restartable
     , rio
     , sdl2
@@ -88,6 +91,7 @@ test-suite alien-expedition-test
     , less-arbitrary
     , microlens-th
     , quickcheck-classes
+    , rapid
     , restartable
     , rio
     , sdl2
